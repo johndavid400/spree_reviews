@@ -1,6 +1,16 @@
 <%= render 'spree/shared/error_messages', target: @review %>
 
 <div class="form-group">
+  <%= f.label :rating %>
+  <div><%= @review.rating %> out of 5</div>
+</div>
+
+<div class="form-group">
+  <%= f.label :user %>
+  <div><%= link_to @review.user.email, spree.edit_admin_user_path(@review.user_id) %></div>
+</div>
+
+<div class="form-group">
   <%= f.label :name %>
   <%= f.text_field :name, class: 'form-control' %>
 </div>
@@ -15,9 +25,29 @@
   <%= f.text_area :review, wrap: 'virtual', rows: 10, cols: 60, class: 'form-control' %>
 </div>
 
+<div class="form-group">
+  <%= f.check_box :approved %>
+  <%= f.label :approved %>
+</div>
+
+<% if @review.images.attached? %>
+  <div class="form-group">
+    <%= f.label :images %>
+    <div class="row">
+      <%- @review.images.each do |image| %>
+        <div class="col-md-4">
+          <%= link_to fa_icon("times", class: "red float-right"), spree.remove_image_admin_review_path(image: image), method: :delete, data: {confirm: "Are you sure you want to remove this image. This process is not reversible."} %>
+          <%= link_to image_tag(image.variant(resize: '240x240>').processed.service_url), image.service_url, target: "_blank" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <% if Spree::Reviews::Config[:track_locale] %>
   <div class="form-group">
     <%= f.label :locale %>
     <%= f.select :locale, I18n.available_locales.map { |lc| [t(lc, default: lc.to_s), lc.to_s] }, {}, class: 'select2' %>
   </div>
 <% end %>
+

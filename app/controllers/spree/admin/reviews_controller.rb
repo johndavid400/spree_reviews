@@ -21,6 +21,13 @@ class Spree::Admin::ReviewsController < Spree::Admin::ResourceController
     redirect_to admin_reviews_path
   end
 
+  def remove_image
+    review = Spree::Review.find(params[:id])
+    image = review.images.find(params[:image])
+    image.purge
+    redirect_to edit_admin_review_path(review)
+  end
+
   private
 
   def collection

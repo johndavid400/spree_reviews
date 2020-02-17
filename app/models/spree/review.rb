@@ -3,6 +3,8 @@ class Spree::Review < ActiveRecord::Base
   belongs_to :user, class_name: Spree.user_class.to_s
   has_many   :feedback_reviews
 
+  has_many_attached :images
+
   after_save :recalculate_product_rating, if: :approved?
   after_destroy :recalculate_product_rating
 

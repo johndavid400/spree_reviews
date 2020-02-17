@@ -1,24 +1,34 @@
+<hr>
 <%= form_for review, url: product_reviews_path(product), html: { method: :post } do |f| %>
   <%= render 'spree/shared/error_messages', target: review %>
 
   <div class="form-group">
-    <%= f.label :rating %>
+    <%= f.label :rating, "Rating *" %>
+    <div>
     <%= render 'spree/reviews/stars', stars: review.rating, edit_enabled: true %>
+    </div>
   </div>
 
   <div class="form-group">
-    <%= f.label :name %>
+    <%= f.label :name, "Your Name *" %>
+    <div class="gray">This name will show up next to your review.</div>
     <%= f.text_field :name, maxlength: 255, size: 50, class: 'form-control' %>
   </div>
 
   <div class="form-group">
-    <%= f.label :title %>
+    <%= f.label :title, "Review Title" %>
     <%= f.text_field :title, maxlength: 255, size: 50, class: 'form-control' %>
   </div>
 
   <div class="form-group">
-    <%= f.label :review %>
+    <%= f.label :review, "Content *" %>
     <%= f.text_area :review, wrap: 'virtual', rows: 10, cols: 50, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :images, "Images" %>
+    <div class="gray">(Optional) Please select up to 3 images to include with your review.</div>
+    <%= f.file_field :images, multiple: true, class: 'form-control image-item' %>
   </div>
 
   <% if Spree::Reviews::Config[:show_identifier] %>
@@ -30,7 +40,9 @@
     </div>
   <% end %>
 
-  <div class="form-actions">
-    <%= f.submit Spree.t(:submit_your_review), class: 'btn btn-default' %>
+  <div class="form-actions form-submit-wrapper">
+    <%= link_to "Cancel", spree.product_path(review.product), class: "btn btn-default float-left" %>
+    <%= f.submit Spree.t(:submit_your_review), class: 'btn btn-primary float-right' %>
   </div>
+
 <% end %>
