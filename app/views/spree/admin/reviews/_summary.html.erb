@@ -1,0 +1,56 @@
+<hr>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table">
+      <thead>
+        <tr>
+          <th colspan="2">
+            <h5>
+              Totals
+            </h5>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Total Reviews
+          </td>
+          <th>
+            <%= Spree::Review.approved.count %>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            Products Reviewed
+          </td>
+          <th>
+            <%= Spree::Review.approved.pluck(:product_id).uniq.count %>
+          </th>
+        </tr>
+      </tbody>
+      <thead>
+        <tr>
+          <th colspan="2">
+            <h5>
+              By rating
+            </h5>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <%- Spree::Review.approved.unscoped.group(:rating).count.sort.reverse.to_h.each do |rating, count| %>
+          <tr>
+            <td>
+              <%- (1..rating).each do %>
+                <%= fa_icon("star", class: "yellow fa-2x") %>
+              <% end %>
+            </td>
+            <th><%= count %></th>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<hr>
