@@ -1,56 +1,61 @@
-<hr>
-<div class="row">
-  <div class="col-md-12">
-    <table class="table">
-      <thead>
-        <tr>
-          <th colspan="2">
-            <h5>
-              Totals
-            </h5>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            Total Reviews
-          </td>
-          <th>
-            <%= Spree::Review.approved.count %>
-          </th>
-        </tr>
-        <tr>
-          <td>
-            Products Reviewed
-          </td>
-          <th>
-            <%= Spree::Review.approved.pluck(:product_id).uniq.count %>
-          </th>
-        </tr>
-      </tbody>
-      <thead>
-        <tr>
-          <th colspan="2">
-            <h5>
-              By rating
-            </h5>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <%- Spree::Review.approved.unscoped.group(:rating).count.sort.reverse.to_h.each do |rating, count| %>
+<%- unless params[:q].present? %>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <%- total_count = Spree::Review.approved.count %>
+      <table class="table">
+        <thead>
           <tr>
-            <td>
-              <%- (1..rating).each do %>
-                <%= fa_icon("star", class: "yellow fa-2x") %>
-              <% end %>
-            </td>
-            <th><%= count %></th>
+            <th colspan="3">
+              <h5>
+                Totals
+              </h5>
+            </th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="2">
+              Total Reviews
+            </td>
+            <th>
+              <%= total_count %>
+            </th>
+          </tr>
+          <tr>
+            <td colspan="2">
+              Products Reviewed
+            </td>
+            <th>
+              <%= Spree::Review.approved.pluck(:product_id).uniq.count %>
+            </th>
+          </tr>
+        </tbody>
+        <thead>
+          <tr>
+            <th colspan="3">
+              <h5>
+                By rating
+              </h5>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <%- Spree::Review.approved.unscoped.group(:rating).count.sort.reverse.to_h.each do |rating, count| %>
+            <tr>
+              <td>
+                <%- (1..rating).each do %>
+                  <%= fa_icon("star", class: "yellow fa-2x") %>
+                <% end %>
+              </td>
+              <th><%= count %></th>
+              <th><%= ((count / total_count.to_f) * 100).round(1) %>%</th>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-<hr>
+  <hr>
+<% end %>
+
